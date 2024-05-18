@@ -43,6 +43,26 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+
+        setupAccessibility(product)
+
+    }
+
+    private fun setupAccessibility(product: ProductModel) {
+        product.apply {
+            binding.apply {
+                settingImageView.contentDescription = getString(R.string.settingDescription)
+                previewImageView.contentDescription = getString(R.string.previewDescription)
+                colorTextView.contentDescription = getString(R.string.colorDescription)
+                sizeTextView.contentDescription = getString(R.string.sizeDescription)
+                ratingTextView.contentDescription = getString(
+                    R.string.ratingDescription,
+                    rating.withNumberingFormat(),
+                    countRating.withNumberingFormat()
+                )
+                storeTextView.contentDescription = getString(R.string.storeDescription, store)
+            }
+        }
     }
 
     private fun setupAction() {
