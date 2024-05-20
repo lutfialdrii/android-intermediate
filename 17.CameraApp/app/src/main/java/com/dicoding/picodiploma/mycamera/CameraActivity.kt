@@ -1,13 +1,18 @@
 package com.dicoding.picodiploma.mycamera
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.OrientationEventListener
+import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -17,11 +22,45 @@ class CameraActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
+        const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
+        const val CAMERAX_RESULT = 200
     }
 
     private lateinit var binding: ActivityCameraBinding
 
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private var imageCapture: ImageCapture? = null
+
+    //    listener orientation photo
+    private val orientationEventListenr by lazy {
+        object : OrientationEventListener(this) {
+            override fun onOrientationChanged(orientation: Int) {
+                if (orientation == ORIENTATION_UNKNOWN) {
+                    return
+                }
+
+                val rotation = when (orientation) {
+                    in 45 until 135 -> Surface.ROTATION_270
+                    in 135 until 225 -> Surface.ROTATION_180
+                    in 225 until 315 -> Surface.ROTATION_90
+                    else -> Surface.ROTATION_90
+                }
+
+                imageCapture?.targetRotation = rotation
+            }
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        orientationEventListenr.enable()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        orientationEventListenr.disable()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +68,8 @@ class CameraActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.switchCamera.setOnClickListener {
+            cameraSelector =
+                if (cameraSelector.equals(CameraSelector.DEFAULT_BACK_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
             startCamera()
         }
         binding.captureImage.setOnClickListener { takePhoto() }
@@ -49,12 +90,15 @@ class CameraActivity : AppCompatActivity() {
                 it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             }
 
+            imageCapture = ImageCapture.Builder().build()
+
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this,
                     cameraSelector,
-                    preview
+                    preview,
+                    imageCapture
                 )
             } catch (e: Exception) {
                 Toast.makeText(this@CameraActivity, "Something went wrong!", Toast.LENGTH_SHORT)
@@ -65,7 +109,31 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
-        // takePhoto
+        val imageCapture = imageCapture ?: return
+
+        val photoFile = createCustomTempFile(application)
+
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val intent = Intent()
+                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
+                    setResult(CAMERAX_RESULT, intent)
+                    finish()
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Toast.makeText(this@CameraActivity, "Something went wrong!", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e(TAG, "onError: ${exception.message}")
+                }
+
+            }
+        )
     }
 
     private fun hideSystemUI() {

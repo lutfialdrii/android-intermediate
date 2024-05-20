@@ -6,11 +6,14 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.OrientationEventListener
+import android.view.Surface
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.dicoding.picodiploma.mycamera.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
+
 
 //    Check Permission
 
@@ -95,9 +99,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val launcherIntentCameraX =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            Log.d(TAG, "DATA: ${it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)}")
+
+            currentImageUri =
+                it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
+            Log.d(TAG, "uri: ${currentImageUri.toString()}")
+            showImage()
+//            if (it.resultCode == 200) {
+//                currentImageUri =
+//                    it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
+//                showImage()
+//            } else {
+//                Log.d(TAG, "uri: ${currentImageUri.toString()}")
+//            }
+        }
+
 
     private fun startCameraX() {
         startActivity(Intent(this, CameraActivity::class.java))
+        launcherIntentCameraX.launch(intent)
     }
 
     private fun uploadImage() {
