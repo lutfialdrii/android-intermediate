@@ -34,15 +34,19 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (it != null) {
             currentImageUri = it
-            showImage(it)
+            showImage()
         } else {
             Toast.makeText(this, "No media selected!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun showImage(uri: Uri) {
-        Log.d(TAG, "showImage: $uri")
-        binding.previewImageView.setImageURI(uri)
+    private fun showImage() {
+        Log.d(TAG, "showImage: $currentImageUri")
+        if (currentImageUri != null) binding.previewImageView.setImageURI(currentImageUri) else Toast.makeText(
+            this,
+            "Something went wrong!",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 
@@ -51,8 +55,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        Toast.makeText(this, "Fitur ini belum tersedia", Toast.LENGTH_SHORT).show()
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri)
     }
+
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) {
+        if (it) {
+            showImage()
+        }
+    }
+
 
     private fun startCameraX() {
         Toast.makeText(this, "Fitur ini belum tersedia", Toast.LENGTH_SHORT).show()
