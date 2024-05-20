@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startCameraX() {
-        startActivity(Intent(this, CameraActivity::class.java))
+        val intent = Intent(this, CameraActivity::class.java)
         launcherIntentCameraX.launch(intent)
     }
 
