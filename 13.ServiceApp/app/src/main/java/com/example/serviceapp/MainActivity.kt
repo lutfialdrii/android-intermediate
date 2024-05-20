@@ -1,10 +1,13 @@
 package com.example.serviceapp
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +19,8 @@ import com.example.serviceapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var boundStatus = false
+    private lateinit var boundService: MyBoundService
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -66,5 +71,42 @@ class MainActivity : AppCompatActivity() {
             stopService(foregroundServiceIntent)
         }
 
+        val boundServiceIntent = Intent(this, MyBoundService::class.java)
+        binding.btnStartBoundService.setOnClickListener {
+            bindService(boundServiceIntent, connection, BIND_AUTO_CREATE)
+        }
+
+        binding.btnStopBoundService.setOnClickListener {
+            unbindService(connection)
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (boundStatus) {
+            unbindService(connection)
+            boundStatus = false
+        }
+    }
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val myBinder = service as MyBoundService.MyBinder
+            boundService = myBinder.getService
+            boundStatus = true
+            getNumberFromService()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            boundStatus = false
+        }
+
+    }
+
+    private fun getNumberFromService() {
+        boundService.numberLiveData.observe(this) { number ->
+            binding.tvBoundServiceNumber.text = number.toString()
+        }
     }
 }
