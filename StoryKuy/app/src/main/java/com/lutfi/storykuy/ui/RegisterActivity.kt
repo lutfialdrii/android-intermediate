@@ -29,23 +29,23 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
 
-            viewModel.register(name, email, password)
+            viewModel.register(name, email, password).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                        }
 
-            viewModel.registerState.observe(this) {
-                when (it) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
+                        is ResultState.Error -> {
+                            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                            showLoading(false)
+                        }
 
-                    is ResultState.Error -> {
-                        Toast.makeText(this, "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
-                        showLoading(false)
-                    }
-
-                    is ResultState.Success -> {
-                        showLoading(false)
-                        Toast.makeText(this, "Akun berhasil didaftarkan", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, LoginActivity::class.java))
+                        is ResultState.Success -> {
+                            Toast.makeText(this, (result.data.message), Toast.LENGTH_SHORT).show()
+                            showLoading(false)
+                            startActivity(Intent(this, LoginActivity::class.java))
+                        }
                     }
                 }
             }

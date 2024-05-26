@@ -2,11 +2,11 @@ package com.lutfi.storykuy.ui.customview
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatEditText
+import com.google.android.material.textfield.TextInputEditText
 
 class PasswordEditText @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : AppCompatEditText(context, attrs) {
+) : TextInputEditText(context, attrs) {
     override fun onTextChanged(
         text: CharSequence?,
         start: Int,

@@ -1,21 +1,30 @@
 package com.lutfi.storykuy.data
 
+import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import com.lutfi.storykuy.data.models.RegisterResponse
 import com.lutfi.storykuy.data.remote.retrofit.ApiService
 import com.lutfi.storykuy.utils.AppExecutors
-import retrofit2.Response
+import retrofit2.HttpException
 
 
 class AuthRepository private constructor(
     private val apiService: ApiService,
 ) {
-    suspend fun register(name: String, email: String, password: String) : Response<RegisterResponse> {
-        return apiService.register(name, email, password)
+    fun register(name: String, email: String, password: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.register(name, email, password)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
     }
 
     //    singleton
     companion object {
-
         @Volatile
         private var instance: AuthRepository? = null
         fun getInstance(
