@@ -1,5 +1,6 @@
 package com.lutfi.storykuy.data.remote.retrofit
 
+import com.lutfi.storykuy.data.models.LoginResponse
 import com.lutfi.storykuy.data.models.RegisterResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -13,4 +14,11 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String,
     ): RegisterResponse
+
+    @FormUrlEncoded
+    @POST("login")
+    suspend fun login(
+        @Field("email") email: String,
+        @Field("password") password: String,
+    ): LoginResponse
 }

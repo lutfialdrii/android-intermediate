@@ -1,4 +1,4 @@
-package com.lutfi.storykuy.ui
+package com.lutfi.storykuy.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,28 +8,33 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lutfi.storykuy.data.ResultState
-import com.lutfi.storykuy.databinding.ActivityRegisterBinding
-import com.lutfi.storykuy.ui.viewmodel.RegisterViewModel
+import com.lutfi.storykuy.databinding.ActivityLoginBinding
+import com.lutfi.storykuy.ui.MainActivity
+import com.lutfi.storykuy.ui.ViewModelFactory
 
-class RegisterActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterBinding
+class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
 
-    private val viewModel by viewModels<RegisterViewModel> {
+    private val viewModel by viewModels<AuthViewModel> {
         ViewModelFactory.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.registerButton.setOnClickListener {
-            val name = binding.edRegisterName.text.toString()
-            val email = binding.edRegisterEmail.text.toString()
-            val password = binding.edRegisterPassword.text.toString()
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
 
-            viewModel.register(name, email, password).observe(this) { result ->
+        binding.loginButton.setOnClickListener {
+            val email = binding.edLoginEmail.text.toString()
+            val password = binding.edLoginPassword.text.toString()
+
+            viewModel.login(email, password).observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is ResultState.Loading -> {
@@ -44,7 +49,8 @@ class RegisterActivity : AppCompatActivity() {
                         is ResultState.Success -> {
                             Toast.makeText(this, (result.data.message), Toast.LENGTH_SHORT).show()
                             showLoading(false)
-                            startActivity(Intent(this, LoginActivity::class.java))
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }
@@ -52,7 +58,16 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private val TAG = LoginActivity::class.java.simpleName
     }
 }

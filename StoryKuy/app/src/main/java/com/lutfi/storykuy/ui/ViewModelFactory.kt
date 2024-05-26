@@ -4,15 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lutfi.storykuy.data.AuthRepository
 import com.lutfi.storykuy.di.Injection
-import com.lutfi.storykuy.ui.viewmodel.RegisterViewModel
+import com.lutfi.storykuy.ui.auth.AuthViewModel
 
 class ViewModelFactory private constructor(private val authRepository: AuthRepository) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
-                RegisterViewModel(authRepository) as T
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
+                AuthViewModel(authRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class : " + modelClass.name)

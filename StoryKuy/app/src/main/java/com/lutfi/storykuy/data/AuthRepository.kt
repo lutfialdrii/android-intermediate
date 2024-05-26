@@ -2,6 +2,7 @@ package com.lutfi.storykuy.data
 
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
+import com.lutfi.storykuy.data.models.LoginResponse
 import com.lutfi.storykuy.data.models.RegisterResponse
 import com.lutfi.storykuy.data.remote.retrofit.ApiService
 import com.lutfi.storykuy.utils.AppExecutors
@@ -19,6 +20,18 @@ class AuthRepository private constructor(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
+    fun login(email: String, password: String) = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.login(email, password)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
             emit(ResultState.Error(errorResponse.message))
         }
     }
