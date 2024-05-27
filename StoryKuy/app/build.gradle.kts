@@ -60,8 +60,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx) // untuk lifecycleScope
 
 //    Room + Lifecycle Coroutine Support
+    implementation(libs.androidx.room.ktx)
+
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx) //viewModelScope
     implementation(libs.androidx.lifecycle.livedata.ktx) //liveData
-    implementation(libs.androidx.room.ktx)
+
+//    datastore
+    implementation(libs.androidx.datastore.preferences)
+
+//    coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
 }

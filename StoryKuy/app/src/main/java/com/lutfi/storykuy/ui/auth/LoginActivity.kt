@@ -9,14 +9,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.lutfi.storykuy.data.ResultState
 import com.lutfi.storykuy.databinding.ActivityLoginBinding
-import com.lutfi.storykuy.ui.MainActivity
 import com.lutfi.storykuy.ui.ViewModelFactory
+import com.lutfi.storykuy.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     private val viewModel by viewModels<AuthViewModel> {
-        ViewModelFactory.getInstance()
+        ViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
                         is ResultState.Success -> {
                             Toast.makeText(this, (result.data.message), Toast.LENGTH_SHORT).show()
                             showLoading(false)
+                            viewModel.saveLoginResult(result.data.loginResult!!)
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                         }
