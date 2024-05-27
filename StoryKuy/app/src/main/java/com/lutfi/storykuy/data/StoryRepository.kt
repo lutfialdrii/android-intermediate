@@ -49,6 +49,10 @@ class StoryRepository private constructor(
     // Retrieve login result
     val loginResultFlow: Flow<LoginResult> = dataStoreManager.loginResultFlow
 
+    suspend fun logout() {
+        dataStoreManager.clearData()
+    }
+
     //    singleton
     companion object {
         @Volatile

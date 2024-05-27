@@ -15,7 +15,6 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "au
 
 class DataStoreManager private constructor(private val dataStore: DataStore<Preferences>) {
 
-    // Define keys for storing data
     private val NAME_KEY = stringPreferencesKey("name")
     private val USER_ID_KEY = stringPreferencesKey("userId")
     private val TOKEN_KEY = stringPreferencesKey("token")
@@ -35,6 +34,12 @@ class DataStoreManager private constructor(private val dataStore: DataStore<Pref
             userId = preferences[USER_ID_KEY],
             token = preferences[TOKEN_KEY]
         )
+    }
+
+    suspend fun clearData() {
+        dataStore.edit {
+            it.clear()
+        }
     }
 
 
