@@ -9,9 +9,10 @@ import com.lutfi.storykuy.data.models.LoginResult
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val storyRepository: StoryRepository) : ViewModel() {
-    fun getLoginResult(): LiveData<LoginResult> {
+    fun getLoginResult(): LiveData<LoginResult?> {
         return storyRepository.loginResultFlow.asLiveData()
     }
+
 
     fun logout() {
         viewModelScope.launch {

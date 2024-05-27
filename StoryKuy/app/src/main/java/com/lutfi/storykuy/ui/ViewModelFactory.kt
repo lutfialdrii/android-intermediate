@@ -11,6 +11,7 @@ import com.lutfi.storykuy.ui.main.MainViewModel
 class ViewModelFactory private constructor(private val storyRepository: StoryRepository) :
     ViewModelProvider.NewInstanceFactory() {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> {

@@ -28,12 +28,18 @@ class DataStoreManager private constructor(private val dataStore: DataStore<Pref
         }
     }
 
-    val loginResultFlow: Flow<LoginResult> = dataStore.data.map { preferences ->
-        LoginResult(
-            name = preferences[NAME_KEY],
-            userId = preferences[USER_ID_KEY],
-            token = preferences[TOKEN_KEY]
-        )
+    val loginResultFlow: Flow<LoginResult?> = dataStore.data.map { preferences ->
+        val name = preferences[NAME_KEY]
+        val userId = preferences[USER_ID_KEY]
+        val token = preferences[TOKEN_KEY]
+        if (name != null && userId != null && token != null) {
+            LoginResult(
+                name, userId, token
+            )
+        } else {
+            null
+        }
+
     }
 
     suspend fun clearData() {

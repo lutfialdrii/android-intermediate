@@ -24,20 +24,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
-
-
         viewModel.getLoginResult().observe(this) {
-            if (it.token == null) {
+            if (it == null) {
                 moveToLogin()
             } else {
+                setContentView(binding.root)
                 binding.tvMain.text = it.toString()
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
