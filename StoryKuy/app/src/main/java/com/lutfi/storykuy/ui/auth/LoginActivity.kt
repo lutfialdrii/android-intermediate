@@ -34,28 +34,39 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edLoginEmail.text.toString()
             val password = binding.edLoginPassword.text.toString()
 
-            viewModel.login(email, password).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is ResultState.Loading -> {
-                            showLoading(true)
-                        }
+            var isEmptyFields = false
+            if (email.isEmpty()) {
+                isEmptyFields = true
+                binding.edLoginEmail.error = "Tidak Boleh Kosong!"
+            }
+            if (password.isEmpty()) {
+                isEmptyFields = true
+                binding.edLoginPassword.error = "Tidak Boleh Kosong!"
+            }
+            if (!isEmptyFields) {
+                viewModel.login(email, password).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                            }
 
-                        is ResultState.Error -> {
-                            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                            showLoading(false)
-                        }
+                            is ResultState.Error -> {
+                                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                                showLoading(false)
+                            }
 
-                        is ResultState.Success -> {
-                            Toast.makeText(this, (result.data.message), Toast.LENGTH_SHORT).show()
-                            showLoading(false)
-                            viewModel.saveLoginResult(result.data.loginResult!!)
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
+                            is ResultState.Success -> {
+                                showLoading(false)
+                                viewModel.saveLoginResult(result.data.loginResult!!)
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 

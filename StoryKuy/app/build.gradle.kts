@@ -73,4 +73,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
+//    Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
 }

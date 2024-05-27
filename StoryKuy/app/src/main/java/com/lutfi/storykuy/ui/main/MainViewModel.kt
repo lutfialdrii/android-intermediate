@@ -19,4 +19,7 @@ class MainViewModel(private val storyRepository: StoryRepository) : ViewModel() 
             storyRepository.logout()
         }
     }
+
+    fun getStories() =
+        storyRepository.getStories()
 }

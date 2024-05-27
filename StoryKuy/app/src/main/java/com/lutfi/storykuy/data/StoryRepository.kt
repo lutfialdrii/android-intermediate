@@ -3,6 +3,7 @@ package com.lutfi.storykuy.data
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.lutfi.storykuy.data.local.DataStoreManager
+import com.lutfi.storykuy.data.models.AllStoriesResponse
 import com.lutfi.storykuy.data.models.LoginResponse
 import com.lutfi.storykuy.data.models.LoginResult
 import com.lutfi.storykuy.data.models.RegisterResponse
@@ -37,6 +38,18 @@ class StoryRepository private constructor(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+    }
+
+    fun getStories() = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getStories()
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, AllStoriesResponse::class.java)
             emit(ResultState.Error(errorResponse.message))
         }
     }

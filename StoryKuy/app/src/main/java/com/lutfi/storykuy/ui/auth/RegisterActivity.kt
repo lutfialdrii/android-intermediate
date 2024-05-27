@@ -35,25 +35,41 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
 
-            viewModel.register(name, email, password).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is ResultState.Loading -> {
-                            showLoading(true)
-                        }
+            var isEmptyFields = false
+            if (name.isEmpty()) {
+                isEmptyFields = true
+                binding.edRegisterName.error = "Tidak Boleh Kosong!"
+            }
+            if (email.isEmpty()) {
+                isEmptyFields = true
+                binding.edRegisterEmail.error = "Tidak Boleh Kosong!"
+            }
+            if (password.isEmpty()) {
+                isEmptyFields = true
+                binding.edRegisterPassword.error = "Tidak Boleh Kosong!"
+            }
+            if (!isEmptyFields) {
+                viewModel.register(name, email, password).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                            }
 
-                        is ResultState.Error -> {
-                            showToast(result.error.toString())
-                            showLoading(false)
-                        }
+                            is ResultState.Error -> {
+                                showToast(result.error.toString())
+                                showLoading(false)
+                            }
 
-                        is ResultState.Success -> {
-                            showToast(result.data.message.toString())
-                            showLoading(false)
-                            startActivity(Intent(this, LoginActivity::class.java))
+                            is ResultState.Success -> {
+                                showToast(result.data.message.toString())
+                                showLoading(false)
+                                startActivity(Intent(this, LoginActivity::class.java))
+                            }
                         }
                     }
                 }
+
             }
         }
     }
