@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
 import com.lutfi.storykuy.R
 import com.lutfi.storykuy.data.ResultState
 import com.lutfi.storykuy.data.models.ListStoryItem
@@ -31,17 +31,21 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val toolbar: Toolbar = binding.toolbar
+        val toolbar: MaterialToolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
         viewModel.getLoginResult().observe(this) {
             if (it == null) {
                 moveToLogin()
+            } else {
+                setContentView(binding.root)
+                binding.rvStories.layoutManager = LinearLayoutManager(this)
+                observeStories()
             }
         }
-        setContentView(binding.root)
-        binding.rvStories.layoutManager = LinearLayoutManager(this)
+    }
 
+    private fun observeStories() {
         viewModel.getStories().observe(this) { result ->
             if (result != null) {
                 when (result) {
