@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ui.main.MainActivity"
-    android:background="@color/green_light"
+    android:background="@color/white"
     >
 
     <com.google.android.material.appbar.MaterialToolbar
