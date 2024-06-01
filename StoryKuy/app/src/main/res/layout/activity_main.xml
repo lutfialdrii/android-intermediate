@@ -34,6 +34,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_story" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddStory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="Tambahkan story"
+        android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
     <ProgressBar
         android:id="@+id/progressIndicator"
         style="?android:attr/progressBarStyle"

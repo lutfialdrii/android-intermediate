@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lutfi.storykuy.data.StoryRepository
 import com.lutfi.storykuy.di.Injection
+import com.lutfi.storykuy.ui.addstory.AddViewModel
 import com.lutfi.storykuy.ui.auth.AuthViewModel
 import com.lutfi.storykuy.ui.main.MainViewModel
 
@@ -19,6 +20,9 @@ class ViewModelFactory private constructor(private val storyRepository: StoryRep
             }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(AddViewModel::class.java) -> {
+                AddViewModel(storyRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class : " + modelClass.name)
         }

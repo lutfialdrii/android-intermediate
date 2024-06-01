@@ -1,9 +1,12 @@
 package com.lutfi.storykuy.ui.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +25,16 @@ class ListStoryAdapter :
             Glide.with(itemView.context).load(storyItem.photoUrl).into(binding.ivPhoto)
 
             binding.root.setOnClickListener {
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(binding.ivPhoto, "photo"),
+                        Pair(binding.tvName, "name"),
+                        Pair(binding.tvDesc, "desc"),
+                    )
                 Intent(ctx, DetailActivity::class.java).also {
                     it.putExtra(DetailActivity.EXTRA_DETAIL, storyItem)
-                    ctx.startActivity(it)
+                    ctx.startActivity(it, optionsCompat.toBundle())
                 }
             }
         }
@@ -37,7 +47,7 @@ class ListStoryAdapter :
 
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        holder.bind(holder.itemView.context,getItem(position))
+        holder.bind(holder.itemView.context, getItem(position))
     }
 
 

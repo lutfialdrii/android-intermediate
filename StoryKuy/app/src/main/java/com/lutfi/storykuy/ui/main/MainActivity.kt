@@ -17,6 +17,7 @@ import com.lutfi.storykuy.data.ResultState
 import com.lutfi.storykuy.data.models.ListStoryItem
 import com.lutfi.storykuy.databinding.ActivityMainBinding
 import com.lutfi.storykuy.ui.ViewModelFactory
+import com.lutfi.storykuy.ui.addstory.AddActivity
 import com.lutfi.storykuy.ui.auth.LoginActivity
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +44,12 @@ class MainActivity : AppCompatActivity() {
                 observeStories()
             }
         }
+
+        binding.fabAddStory.setOnClickListener {
+            Intent(this, AddActivity::class.java).also {
+                startActivity(it)
+            }
+        }
     }
 
     private fun observeStories() {
@@ -64,6 +71,19 @@ class MainActivity : AppCompatActivity() {
                         setData(result.data.listStory)
                     }
                 }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getLoginResult().observe(this) {
+            if (it == null) {
+                moveToLogin()
+            } else {
+                setContentView(binding.root)
+                binding.rvStories.layoutManager = LinearLayoutManager(this)
+                observeStories()
             }
         }
     }
