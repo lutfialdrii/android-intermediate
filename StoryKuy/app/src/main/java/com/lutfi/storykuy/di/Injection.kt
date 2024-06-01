@@ -14,7 +14,7 @@ object Injection {
         val appExecutors = AppExecutors()
         val dataStoreManager = DataStoreManager.getInstance(context.dataStore)
         val user = runBlocking { dataStoreManager.loginResultFlow.first() }
-        val apiService = ApiConfig.getApiService(user?.token)
+        val apiService = ApiConfig.getApiService()
         return StoryRepository.getInstance(apiService, appExecutors, dataStoreManager)
     }
 }

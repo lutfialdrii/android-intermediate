@@ -27,17 +27,6 @@ class StoryRepository private constructor(
     private val apiService: ApiService,
     private val dataStoreManager: DataStoreManager
 ) {
-
-
-
-
-
-
-
-
-
-
-
     fun register(name: String, email: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
@@ -54,6 +43,11 @@ class StoryRepository private constructor(
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.login(email, password)
+            try {
+                saveLoginResult(successResponse.loginResult!!)
+            } catch (e: Exception) {
+                emit(ResultState.Error(e.message))
+            }
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
@@ -62,10 +56,10 @@ class StoryRepository private constructor(
         }
     }
 
-    fun getStories() = liveData {
+    fun getStories(token: String) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.getStories()
+            val successResponse = apiService.getStories("Bearer $token")
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
@@ -87,7 +81,7 @@ class StoryRepository private constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun uploadImage(ctx: Context, uri: Uri, desc: String) = liveData {
+    fun uploadImage(ctx: Context, uri: Uri, desc: String, token: String) = liveData {
         emit(ResultState.Loading)
         val imageFile = uriToFile(uri, ctx).reduceFileImage()
         val desc = desc
@@ -100,7 +94,8 @@ class StoryRepository private constructor(
         )
 
         try {
-            val successResponse = apiService.uploadImage(multipartBody, requestBody)
+            val successResponse =
+                apiService.uploadImage(multipartBody, requestBody, "Bearer $token")
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

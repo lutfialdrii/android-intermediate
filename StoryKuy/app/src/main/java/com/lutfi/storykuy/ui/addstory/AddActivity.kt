@@ -1,5 +1,6 @@
 package com.lutfi.storykuy.ui.addstory
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -20,6 +21,8 @@ import com.lutfi.storykuy.R
 import com.lutfi.storykuy.data.ResultState
 import com.lutfi.storykuy.databinding.ActivityAddBinding
 import com.lutfi.storykuy.ui.ViewModelFactory
+import com.lutfi.storykuy.ui.auth.LoginActivity
+import com.lutfi.storykuy.ui.main.MainActivity
 import com.lutfi.storykuy.utils.getImageUri
 
 class AddActivity : AppCompatActivity() {
@@ -85,25 +88,34 @@ class AddActivity : AppCompatActivity() {
             binding.edAddDescription.error = "Tidak Boleh Kosong!"
         }
         if (currentImageUri != null && !isEmptyFields) {
-            viewModel.uploadImage(this, currentImageUri!!, desc).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is ResultState.Loading -> {
-                            showLoading(true)
+            viewModel.getLoginResult().observe(this) {
+                if (it == null) {
+                    moveToLogin()
+                } else {
+                    viewModel.uploadImage(this, currentImageUri!!, desc, it.token!!)
+                        .observe(this) { result ->
+                            if (result != null) {
+                                when (result) {
+                                    is ResultState.Loading -> {
+                                        showLoading(true)
+                                    }
+                                    is ResultState.Error -> {
+                                        showToast(result.error)
+                                        showLoading(false)
+                                    }
+                                    is ResultState.Success -> {
+                                        showToast(result.data.message)
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                        showLoading(false)
+                                    }
+                                }
+                            }
                         }
-
-                        is ResultState.Error -> {
-                            showToast(result.error)
-                            showLoading(false)
-                        }
-
-                        is ResultState.Success -> {
-                            showToast(result.data.message)
-                            showLoading(false)
-                        }
-                    }
                 }
             }
+
         } else {
             showToast("Lengkapi data terlebih dahulu!")
         }
@@ -135,6 +147,13 @@ class AddActivity : AppCompatActivity() {
         if (it) {
             showImage()
         }
+    }
+
+    private fun moveToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
     private fun showImage() {

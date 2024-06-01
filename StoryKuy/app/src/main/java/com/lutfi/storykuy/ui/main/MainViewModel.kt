@@ -20,6 +20,6 @@ class MainViewModel(private val storyRepository: StoryRepository) : ViewModel() 
         }
     }
 
-    fun getStories() =
-        storyRepository.getStories()
+    fun getStories(token: String) =
+        storyRepository.getStories(token)
 }

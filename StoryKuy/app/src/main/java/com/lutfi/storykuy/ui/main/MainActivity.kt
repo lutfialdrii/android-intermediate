@@ -29,19 +29,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        val toolbar: MaterialToolbar = binding.toolbar
-        setSupportActionBar(toolbar)
 
         viewModel.getLoginResult().observe(this) {
             if (it == null) {
                 moveToLogin()
             } else {
                 setContentView(binding.root)
+                val toolbar: MaterialToolbar = binding.toolbar
+                setSupportActionBar(toolbar)
+                enableEdgeToEdge()
                 binding.rvStories.layoutManager = LinearLayoutManager(this)
-                observeStories()
+                observeStories(it.token!!)
             }
         }
 
@@ -52,8 +51,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeStories() {
-        viewModel.getStories().observe(this) { result ->
+    private fun observeStories(token: String) {
+        viewModel.getStories(token).observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is ResultState.Loading -> {
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 setContentView(binding.root)
                 binding.rvStories.layoutManager = LinearLayoutManager(this)
-                observeStories()
+                observeStories(it.token!!)
             }
         }
     }
