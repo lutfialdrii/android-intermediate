@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/ivPhoto"
+            android:id="@+id/iv_detail_photo"
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:scaleType="centerCrop"
@@ -25,7 +25,7 @@
             />
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tv_detail_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -37,11 +37,11 @@
             android:transitionName="name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivPhoto"
+            app:layout_constraintTop_toBottomOf="@+id/iv_detail_photo"
             tools:text="Name" />
 
         <TextView
-            android:id="@+id/tvDesc"
+            android:id="@+id/tv_detail_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -49,9 +49,9 @@
             android:textSize="14sp"
             android:transitionName="desc"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvName"
-            app:layout_constraintStart_toStartOf="@+id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            app:layout_constraintEnd_toEndOf="@+id/tv_detail_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_detail_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_name"
             tools:text="Ini adalah contoh deskripsi aplikasi story yang menceritakan tentang history kehidupan manusia :v" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/add"
     tools:context=".ui.addstory.AddActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -12,21 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/green"
-        app:titleTextColor="@color/black"
-        app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Add Story"
-        />
+        app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title"
+        app:titleTextColor="@color/black" />
 
     <ImageView
         android:id="@+id/ivStory"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
         android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/storykuy"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Pilih gambar"
+        android:text="@string/select_an_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivStory" />
 
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Camera"
+        android:text="@string/camera"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Galeri"
+        android:text="@string/gallery"
         app:layout_constraintBottom_toBottomOf="@+id/btnCamera"
         app:layout_constraintStart_toEndOf="@+id/btnCamera"
         app:layout_constraintTop_toTopOf="@+id/btnCamera" />
@@ -66,20 +66,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:labelFor="@id/etDesc"
-        android:text="Masukkan deskripsi"
+        android:labelFor="@id/ed_add_description"
+        android:text="@string/enter_a_description"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/btnCamera"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
 
     <EditText
-        android:id="@+id/etDesc"
+        android:id="@+id/ed_add_description"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="4dp"
         android:autofillHints=""
         android:gravity="start"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
         android:inputType="textMultiLine"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,16 +87,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/btnUpload"
+        android:id="@+id/button_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Upload"
+        android:text="@string/upload"
         android:textAllCaps="false"
         app:backgroundTint="@color/green"
-        app:layout_constraintEnd_toEndOf="@+id/etDesc"
-        app:layout_constraintStart_toStartOf="@+id/etDesc"
-        app:layout_constraintTop_toBottomOf="@+id/etDesc" />
+        app:layout_constraintEnd_toEndOf="@+id/ed_add_description"
+        app:layout_constraintStart_toStartOf="@+id/ed_add_description"
+        app:layout_constraintTop_toBottomOf="@+id/ed_add_description" />
 
     <ProgressBar
         android:id="@+id/progressIndicator"

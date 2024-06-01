@@ -5,33 +5,32 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".ui.main.MainActivity"
     android:background="@color/white"
-    >
+    android:fitsSystemWindows="true"
+    tools:context=".ui.main.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/green"
-        app:titleTextColor="@color/black"
-        app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/main_menu"
-        app:title="@string/app_name" />
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/TextAppearance.Material3.ActionBar.Title"
+        app:titleTextColor="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStories"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_story" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="Tambahkan story"
+        android:contentDescription="@string/Add_story_button"
         android:src="@drawable/baseline_add_24"
         app:backgroundTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"

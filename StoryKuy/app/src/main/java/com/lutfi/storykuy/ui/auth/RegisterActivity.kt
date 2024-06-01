@@ -1,5 +1,7 @@
 package com.lutfi.storykuy.ui.auth
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -24,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+        playAnimation()
 
         binding.tvLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -72,6 +75,36 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
             }
+        }
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val login = ObjectAnimator.ofFloat(binding.toLogin, View.ALPHA, 1f).setDuration(100)
+        val register =
+            ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(100)
+        val tvName = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
+        val etName =
+            ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(100)
+        val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val etEmail =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val tvPassword =
+            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val etPassword =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val together = AnimatorSet().apply {
+            playTogether(login, register)
+        }
+
+        AnimatorSet().apply {
+            playSequentially(tvName, etName, tvEmail, etEmail, tvPassword, etPassword, together)
+            start()
         }
     }
 

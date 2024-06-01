@@ -20,17 +20,17 @@ class ListStoryAdapter :
     class StoryViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(ctx: Context, storyItem: ListStoryItem) {
-            binding.tvName.text = storyItem.name
-            binding.tvDesc.text = storyItem.description
-            Glide.with(itemView.context).load(storyItem.photoUrl).into(binding.ivPhoto)
+            binding.tvItemName.text = storyItem.name
+            binding.tvItemDesc.text = storyItem.description
+            Glide.with(itemView.context).load(storyItem.photoUrl).into(binding.ivItemPhoto)
 
             binding.root.setOnClickListener {
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
-                        Pair(binding.ivPhoto, "photo"),
-                        Pair(binding.tvName, "name"),
-                        Pair(binding.tvDesc, "desc"),
+                        Pair(binding.ivItemPhoto, "photo"),
+                        Pair(binding.tvItemName, "name"),
+                        Pair(binding.tvItemDesc, "desc"),
                     )
                 Intent(ctx, DetailActivity::class.java).also {
                     it.putExtra(DetailActivity.EXTRA_DETAIL, storyItem)

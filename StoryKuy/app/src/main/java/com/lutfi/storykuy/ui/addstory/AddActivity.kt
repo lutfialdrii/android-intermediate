@@ -73,16 +73,16 @@ class AddActivity : AppCompatActivity() {
 
         binding.btnCamera.setOnClickListener { startCam() }
         binding.btnGallery.setOnClickListener { startGallery() }
-        binding.btnUpload.setOnClickListener { upload() }
+        binding.buttonAdd.setOnClickListener { upload() }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun upload() {
-        val desc = binding.etDesc.text.toString()
+        val desc = binding.edAddDescription.text.toString()
         var isEmptyFields = false
         if (desc.isEmpty()) {
             isEmptyFields = true
-            binding.etDesc.error = "Tidak Boleh Kosong!"
+            binding.edAddDescription.error = "Tidak Boleh Kosong!"
         }
         if (currentImageUri != null && !isEmptyFields) {
             viewModel.uploadImage(this, currentImageUri!!, desc).observe(this) { result ->

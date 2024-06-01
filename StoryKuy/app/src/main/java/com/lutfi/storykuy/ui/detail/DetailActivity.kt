@@ -22,9 +22,9 @@ class DetailActivity : AppCompatActivity() {
         }
 
         if (story != null) {
-            Glide.with(this).load(story.photoUrl).into(binding.ivPhoto)
-            binding.tvDesc.text = story.description
-            binding.tvName.text = story.name
+            Glide.with(this).load(story.photoUrl).into(binding.ivDetailPhoto)
+            binding.tvDetailDescription.text = story.description
+            binding.tvDetailName.text = story.name
         }
 
     }
