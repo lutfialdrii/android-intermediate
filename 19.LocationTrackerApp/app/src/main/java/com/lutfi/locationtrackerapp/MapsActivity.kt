@@ -3,9 +3,11 @@ package com.lutfi.locationtrackerapp
 import android.Manifest
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
@@ -13,7 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 
@@ -22,7 +26,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.lutfi.locationtrackerapp.databinding.ActivityMapsBinding
 import java.util.concurrent.TimeUnit
 
@@ -33,6 +39,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
+
+    private var isTracking = false
+
+    private lateinit var locationCallback: LocationCallback
+
+    private var allLatLng = ArrayList<LatLng>()
+
+    private var boundsBuilder = LatLngBounds.Builder()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -46,10 +60,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
 //                Approximate Location is granted
                 getMyLastLocation()
-            }
-
-            else -> {
-
             }
         }
     }
@@ -89,8 +99,77 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        getMyLastLocation()
+//        getMyLastLocation()
         createLocationRequest()
+        createLocationCallback()
+
+        binding.btnStart.setOnClickListener {
+            if (!isTracking) {
+                clearMaps()
+                updateTrackingStatus(true)
+                startLocationUpdates()
+            } else {
+                updateTrackingStatus(false)
+                stopLocationUpdates()
+
+            }
+        }
+
+
+    }
+
+    private fun clearMaps() {
+        mMap.clear()
+        allLatLng.clear()
+        boundsBuilder = LatLngBounds.Builder()
+    }
+
+    private fun startLocationUpdates() {
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        } catch (e: SecurityException) {
+            Log.e(TAG, "startLocationUpdates: ${e.message}")
+        }
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun createLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                for (location in locationResult.locations) {
+                    Log.d(TAG, "onLocationResult: " + location.latitude + ", " + location.longitude)
+                    val lastLatLng = LatLng(location.latitude, location.longitude)
+
+                    allLatLng.add(lastLatLng)
+                    mMap.addPolyline(
+                        PolylineOptions().color(Color.CYAN)
+                            .width(10f)
+                            .addAll(allLatLng)
+                    )
+
+//                    set Boundaries
+                    boundsBuilder.include(lastLatLng)
+                    val bounds: LatLngBounds = boundsBuilder.build()
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+                }
+            }
+        }
+    }
+
+    private fun updateTrackingStatus(newStatus: Boolean) {
+        isTracking = newStatus
+        if (isTracking) {
+            binding.btnStart.text = getText(R.string.stop_running)
+        } else {
+            binding.btnStart.text = getText(R.string.start_running)
+        }
     }
 
     private fun createLocationRequest() {
@@ -161,6 +240,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return ContextCompat.checkSelfPermission(
             this, permission
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isTracking) {
+            startLocationUpdates()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
     }
 
     companion object {
