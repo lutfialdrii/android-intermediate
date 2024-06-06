@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,8 +16,11 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -36,8 +41,13 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+    secrets {
+        propertiesFileName = "secrets.properties"
     }
 }
+
 
 dependencies {
 
@@ -50,4 +60,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
+    implementation(libs.play.services.location)
 }
