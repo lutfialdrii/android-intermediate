@@ -8,7 +8,6 @@ import com.dicoding.newsapp.data.Result
 import com.dicoding.newsapp.data.local.entity.NewsEntity
 import com.dicoding.newsapp.utils.DataDummy
 import com.dicoding.newsapp.utils.getOrAwaitValue
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
