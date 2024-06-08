@@ -21,7 +21,12 @@ android {
     buildTypes {
         named("release") {
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
+            )
         }
     }
     buildFeatures {
@@ -36,6 +41,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -86,4 +94,15 @@ dependencies {
     //special instrumentation testing
     androidTestImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
     androidTestImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+
+    //TestCoroutineDispatcher
+    debugImplementation(libs.androidx.fragment.testing) //launchFragmentInContainer
+
+    //mock web server
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+
+    androidTestImplementation(libs.espresso.contrib) //RecyclerViewActions
+
+    implementation(libs.androidx.espresso.idling.resource)
 }
