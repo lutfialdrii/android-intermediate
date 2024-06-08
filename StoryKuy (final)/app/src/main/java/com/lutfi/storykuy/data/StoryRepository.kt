@@ -4,11 +4,17 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.google.gson.Gson
 import com.lutfi.storykuy.data.local.DataStoreManager
 import com.lutfi.storykuy.data.models.AllStoriesResponse
 import com.lutfi.storykuy.data.models.ErrorResponse
+import com.lutfi.storykuy.data.models.ListStoryItem
 import com.lutfi.storykuy.data.models.LoginResponse
 import com.lutfi.storykuy.data.models.LoginResult
 import com.lutfi.storykuy.data.remote.retrofit.ApiService
@@ -59,13 +65,24 @@ class StoryRepository private constructor(
     fun getStories(token: String) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.getStories("Bearer $token")
+            val successResponse = apiService.getStoriesLoc("Bearer $token")
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, AllStoriesResponse::class.java)
             emit(ResultState.Error(errorResponse.message))
         }
+    }
+
+    fun getAllStory(token: String): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { StoryPagingSource(apiService, token) },
+            initialKey = 1
+        ).liveData
     }
 
     // Save login result
@@ -107,6 +124,8 @@ class StoryRepository private constructor(
 
     //    singleton
     companion object {
+        private const val PAGE_SIZE = 10
+
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(

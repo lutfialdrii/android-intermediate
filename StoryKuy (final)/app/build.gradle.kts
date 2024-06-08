@@ -92,6 +92,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
 //    Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
+
+//    Paging
+    implementation(libs.androidx.paging.runtime.ktx)
 
 }
