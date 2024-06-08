@@ -19,6 +19,7 @@ import com.lutfi.storykuy.databinding.ActivityMainBinding
 import com.lutfi.storykuy.ui.ViewModelFactory
 import com.lutfi.storykuy.ui.addstory.AddActivity
 import com.lutfi.storykuy.ui.auth.LoginActivity
+import com.lutfi.storykuy.ui.location.LocationActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -105,6 +106,11 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
+
+            R.id.location -> {
+                val intent = Intent(this, LocationActivity::class.java)
                 startActivity(intent)
             }
         }

@@ -5,4 +5,9 @@
         android:id="@+id/logout"
         android:title="Logout"
         app:showAsAction="withText" />
+    <item
+        android:id="@+id/location"
+        android:title="@string/location"
+        android:icon="@drawable/baseline_map_24"
+        app:showAsAction="always" />
 </menu>
