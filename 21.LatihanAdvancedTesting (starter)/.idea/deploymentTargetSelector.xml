@@ -8,10 +8,10 @@
       <SelectionState runConfigName="NewsDaoTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="saveNews_Success()">
+      <SelectionState runConfigName="NewsFragmentTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="NewsFragmentTest">
+      <SelectionState runConfigName="HomeActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

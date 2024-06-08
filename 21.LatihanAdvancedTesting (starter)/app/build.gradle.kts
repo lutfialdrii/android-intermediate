@@ -105,4 +105,6 @@ dependencies {
     androidTestImplementation(libs.espresso.contrib) //RecyclerViewActions
 
     implementation(libs.androidx.espresso.idling.resource)
+
+    androidTestImplementation(libs.espresso.intents) //IntentsTestRule
 }

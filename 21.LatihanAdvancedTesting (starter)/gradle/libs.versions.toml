@@ -30,6 +30,7 @@ roomCompiler = "2.5.2"
 roomKtx = "2.5.2"
 roomRuntime = "2.5.2"
 viewpager2 = "1.0.0"
+espressoIntents = "3.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,8 @@ okhttp3-okhttp-tls = { module = "com.squareup.okhttp3:okhttp-tls", version.ref =
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoIntents" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
