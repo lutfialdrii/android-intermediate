@@ -26,8 +26,11 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     compileOptions {
+//        For  < android 8
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -68,4 +71,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx) //viewModelScope
     implementation(libs.androidx.lifecycle.livedata.ktx) //liveData
     implementation(libs.androidx.room.ktx)
+
+    //desugaring
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
