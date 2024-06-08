@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">StoryKuy</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="register">Register</string>
+    <string name="dont_have_account">Don\'t have an account yet?</string>
+    <string name="register_now">Register Now</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="storykuy">StoryKuy</string>
+    <string name="Add_story_button">Add story button</string>
+    <string name="placeholder_desc">lorem lorem lorem lorem lorem lorem lorem</string>
+    <string name="select_an_image">Select an image</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="enter_a_description">Enter a description</string>
+    <string name="upload">Upload</string>
+</resources>
