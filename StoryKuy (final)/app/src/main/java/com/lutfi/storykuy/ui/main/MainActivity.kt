@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.MaterialToolbar
 import com.lutfi.storykuy.R
 import com.lutfi.storykuy.data.ResultState
+import com.lutfi.storykuy.data.models.AllStoriesResponse
 import com.lutfi.storykuy.data.models.ListStoryItem
 import com.lutfi.storykuy.databinding.ActivityMainBinding
 import com.lutfi.storykuy.ui.ViewModelFactory
@@ -23,6 +24,7 @@ import com.lutfi.storykuy.ui.location.LocationActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var dataStories: AllStoriesResponse? = null
 
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                     is ResultState.Success -> {
                         Log.d(TAG, "onCreate: ${result.data.listStory}")
                         showLoading(false)
+                        dataStories = result.data
                         setData(result.data.listStory)
                     }
                 }
@@ -110,8 +113,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.location -> {
-                val intent = Intent(this, LocationActivity::class.java)
-                startActivity(intent)
+                if (dataStories != null) {
+                    val intent = Intent(this, LocationActivity::class.java)
+                    intent.putExtra(LocationActivity.EXTRA_STORIES, dataStories)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Sedang mengambil data", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)

@@ -7,6 +7,7 @@ import com.lutfi.storykuy.data.StoryRepository
 import com.lutfi.storykuy.di.Injection
 import com.lutfi.storykuy.ui.addstory.AddViewModel
 import com.lutfi.storykuy.ui.auth.AuthViewModel
+import com.lutfi.storykuy.ui.location.LocationViewModel
 import com.lutfi.storykuy.ui.main.MainViewModel
 
 class ViewModelFactory private constructor(private val storyRepository: StoryRepository) :
@@ -23,6 +24,9 @@ class ViewModelFactory private constructor(private val storyRepository: StoryRep
             }
             modelClass.isAssignableFrom(AddViewModel::class.java) -> {
                 AddViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(LocationViewModel::class.java) -> {
+                LocationViewModel(storyRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class : " + modelClass.name)
         }
